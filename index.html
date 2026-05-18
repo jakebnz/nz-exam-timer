@@ -102,20 +102,22 @@
 
     <!-- FIRST PAGE -->
     <div id="slide-1" class="slide bg-white relative">
-        <div class="flex-grow flex flex-col items-center pt-8 px-8 min-h-0 w-full">
+        <div class="flex-grow flex flex-col items-center pt-[4vh] px-[12vw] min-h-0 w-full">
 
             <!-- Instructions -->
-            <h1 class="text-4xl font-bold nzqa-green px-4 py-1 mb-6 text-black shrink-0">Exam information</h1>
+            <div class="h-[33vh] w-full flex flex-col justify-center shrink-0">
+                <h1 class="text-[5vh] font-bold nzqa-green px-4 py-2 mb-[3vh] text-black self-center shrink-0">Exam
+                    information</h1>
 
-            <div class="text-2xl text-black space-y-3 mb-6 w-full max-w-5xl shrink-0">
-                <p>1. Go to the <strong>NZQA homepage:</strong> <span
-                        class="nzqa-green px-2 text-black font-semibold">www.nzqa.govt.nz</span></p>
-                <p>2. Click on the <strong>yellow 'Log in now' link</strong></p>
+                <div class="text-[3vh] text-black space-y-[2vh] w-full shrink-0">
+                    <p>1. Go to the <strong>NZQA homepage:</strong> <span
+                            class="nzqa-green px-3 text-black font-semibold">www.nzqa.govt.nz</span></p>
+                    <p>2. Click on the <strong>yellow 'Log in now' link</strong></p>
+                </div>
             </div>
 
             <!-- NZQA Header Image Placeholder -->
-            <div
-                class="flex-grow min-h-0 w-full max-w-5xl border-t border-gray-200 pt-6 flex justify-center items-start">
+            <div class="flex-grow min-h-0 w-full border-t-2 border-gray-200 pt-[4vh] flex justify-center items-start">
                 <img src="nzqa-header.png" alt="NZQA Website Header" class="w-full h-full object-contain">
             </div>
         </div>
@@ -130,20 +132,22 @@
 
     <!-- SECOND PAGE -->
     <div id="slide-2" class="slide bg-white relative">
-        <div class="flex-grow flex flex-col items-center pt-12 px-12">
+        <div class="flex-grow flex flex-col items-center px-[12vw]">
 
-            <h2 class="text-4xl font-bold text-black mb-8 self-start pl-10">Now enter this code...</h2>
+            <!-- Header Text -->
+            <div class="flex-1 w-full flex flex-col justify-center">
+                <h2 class="text-[5vh] font-bold text-black">Now enter this code...</h2>
+            </div>
 
             <!-- Dynamic Exam Codes Container -->
-            <div id="exam-codes-container"
-                class="grid gap-x-8 gap-y-8 mb-8 justify-center items-center w-full max-w-5xl">
+            <div id="exam-codes-container" class="grid justify-center items-center w-full shrink-0">
                 <!-- Javascript will inject exam code elements here -->
             </div>
 
             <!-- Footer Instructions -->
-            <div class="w-full max-w-5xl text-black self-start pl-10 mt-auto mb-2">
-                <h3 class="text-2xl font-bold mb-2">When you have finished:</h3>
-                <ol class="list-decimal pl-6 text-xl space-y-1">
+            <div class="flex-1 w-full text-black flex flex-col justify-center">
+                <h3 class="text-[3.5vh] font-bold mb-[2vh]">When you have finished:</h3>
+                <ol class="list-decimal pl-[4vw] text-[2.5vh] space-y-[1.5vh]">
                     <li>The progress bar will be incomplete if you have not added any planning notes. This section is
                         not marked.</li>
                     <li>Make sure you click <strong>FINISH</strong> then <strong>CLOSE</strong> to sign out of the exam
@@ -236,7 +240,7 @@
 
             // Adjust grid columns based on number of exams (max 3 per row)
             const colsClass = examData.length === 1 ? 'grid-cols-1' : (examData.length === 2 ? 'grid-cols-2' : 'grid-cols-3');
-            codesContainer.className = `grid gap-x-12 gap-y-6 mb-6 justify-center items-center w-full max-w-6xl ${colsClass}`;
+            codesContainer.className = `grid gap-x-12 gap-y-6 justify-center items-center w-full shrink-0 ${colsClass}`;
 
             examData.forEach(exam => {
                 const wrapper = document.createElement('div');
@@ -245,14 +249,14 @@
                 // Add name if provided
                 if (exam.name) {
                     const nameEl = document.createElement('div');
-                    nameEl.className = "text-xl font-bold text-black mb-2 text-center w-full px-2 truncate";
+                    nameEl.className = "text-[4vh] font-bold text-black mb-[1.5vh] text-center w-full px-2 truncate";
                     nameEl.innerText = exam.name;
                     wrapper.appendChild(nameEl);
                 }
 
                 // Add code block
                 const codeEl = document.createElement('div');
-                const codeTextSize = examData.length > 3 ? 'text-[5rem] py-3 px-6' : 'text-[8rem] py-5 px-10';
+                const codeTextSize = examData.length > 3 ? 'text-[9vh] py-[1.5vh] px-[3vw]' : 'text-[14vh] py-[2.5vh] px-[4vw]';
                 codeEl.className = `code-yellow text-black ${codeTextSize} leading-none font-bold tracking-tight shadow-sm flex items-center justify-center text-center mx-2`;
                 codeEl.innerText = exam.code;
                 wrapper.appendChild(codeEl);

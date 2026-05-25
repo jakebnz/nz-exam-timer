@@ -95,13 +95,28 @@
                             <div><strong>Spacebar:</strong> Return to settings menu</div>
                         </div>
                     </div>
-                    <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded shadow transition-colors whitespace-nowrap"
-                        style="font-size: min(2.5vh, 1.8vw); padding: 1.5vh 3vw; margin-left: 1vw;">
-                        Start Presentation
-                    </button>
+                    <div class="flex items-center" style="gap: 1vw;">
+                        <button type="button" id="copy-url-btn"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded shadow transition-colors flex items-center justify-center"
+                            style="height: calc(min(2.5vh, 1.8vw) + 3vh); aspect-ratio: 1; padding: 0;" title="Copy pre-fill URL to clipboard">
+                            <img src="https://uxwing.com/wp-content/themes/uxwing/download/file-and-folder-type/copied-icon.png"
+                                alt="Copy" style="height: 50%; width: auto;"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                            <span style="display: none; font-size: min(2.5vh, 1.8vw);">📋</span>
+                        </button>
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded shadow transition-colors whitespace-nowrap"
+                            style="font-size: min(2.5vh, 1.8vw); padding: 1.5vh 3vw;">
+                            Start Presentation
+                        </button>
+                    </div>
                 </div>
             </form>
+        </div>
+        <!-- Toast message -->
+        <div id="copy-toast" class="text-center font-semibold text-green-700 bg-green-100 rounded-lg shadow transition-opacity duration-300 opacity-0 pointer-events-none"
+            style="margin-top: 1.5vh; padding: 1vh 2vw; font-size: min(2vh, 1.5vw);">
+            Current exam codes URL copied to clipboard
         </div>
     </div>
 
@@ -230,9 +245,51 @@
                 }
             }
 
+            // Handle /?1=Name,Code&2=Name,Code URL parameters
+            for (let i = 1; i <= 6; i++) {
+                if (urlParams.has(String(i))) {
+                    const val = urlParams.get(String(i));
+                    const lastComma = val.lastIndexOf(',');
+                    if (lastComma !== -1) {
+                        const name = val.substring(0, lastComma).trim();
+                        const code = val.substring(lastComma + 1).trim();
+                        document.getElementById(`exam-name-${i}`).value = name;
+                        document.getElementById(`exam-code-${i}`).value = code;
+                    } else {
+                        // If no comma, treat entire value as the code
+                        document.getElementById(`exam-code-${i}`).value = val.trim();
+                    }
+                }
+            }
+
             // Start clock
             updateClock();
         }
+
+        // --- Copy URL Button ---
+        document.getElementById('copy-url-btn').addEventListener('click', () => {
+            const params = [];
+            for (let i = 1; i <= 6; i++) {
+                const name = document.getElementById(`exam-name-${i}`).value.trim();
+                const code = document.getElementById(`exam-code-${i}`).value.trim();
+                if (code) {
+                    const value = name ? `${name},${code}` : code;
+                    params.push(`${i}=${encodeURIComponent(value)}`);
+                }
+            }
+            const baseUrl = window.location.origin + window.location.pathname;
+            const fullUrl = params.length > 0 ? `${baseUrl}?${params.join('&')}` : baseUrl;
+
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                const toast = document.getElementById('copy-toast');
+                toast.classList.remove('opacity-0');
+                toast.classList.add('opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0');
+                }, 2500);
+            });
+        });
 
         // --- Form Submission / Start Presentation ---
         setupForm.addEventListener('submit', (e) => {

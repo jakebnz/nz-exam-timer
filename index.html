@@ -91,8 +91,8 @@
                     <div class="text-red-600 flex flex-col" style="font-size: min(1.8vh, 1.3vw);">
                         <p class="font-bold uppercase tracking-wide" style="margin-bottom: 0.8vh;">Controls</p>
                         <div class="flex flex-col" style="gap: 0.5vh;">
-                            <div><strong>Arrow keys:</strong> Navigate between pages</div>
-                            <div><strong>Spacebar:</strong> Return to settings menu</div>
+                            <div><strong>Spacebar / Arrow keys:</strong> Navigate between pages</div>
+                            <div><strong>Esc:</strong> Return to settings menu</div>
                         </div>
                     </div>
                     <div class="flex items-center" style="gap: 1vw;">
@@ -366,11 +366,11 @@
                 return;
             }
 
-            if (e.code === 'Space') {
-                e.preventDefault(); // prevent scrolling
-                goToSlide(0); // Return to setup
-            } else if (e.code === 'ArrowRight') {
+            if (e.code === 'Escape') {
                 e.preventDefault();
+                goToSlide(0); // Return to setup
+            } else if (e.code === 'Space' || e.code === 'ArrowRight') {
+                e.preventDefault(); // prevent scrolling
                 if (currentSlideIndex > 0 && currentSlideIndex < 3) {
                     goToSlide(currentSlideIndex + 1);
                 }

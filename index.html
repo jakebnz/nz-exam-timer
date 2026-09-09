@@ -400,6 +400,35 @@
             setTimeout(updateClock, msUntilNextSecond);
         }
 
+        // --- Screen Wake Lock ---
+        // Stops the display sleeping while the timer is on screen.
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            if (!('wakeLock' in navigator) || wakeLock) return;
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => { wakeLock = null; });
+            } catch (err) {
+                // Denied, battery saver, or non-secure context - carry on regardless.
+                wakeLock = null;
+            }
+        }
+
+        // The lock is dropped automatically when the tab is hidden, so re-take it.
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
+
+        // Browsers may require a user gesture before granting the lock.
+        ['click', 'keydown', 'touchstart'].forEach(evt => {
+            document.addEventListener(evt, requestWakeLock, { passive: true });
+        });
+
+        requestWakeLock();
+
         // Run setup
         init();
     </script>

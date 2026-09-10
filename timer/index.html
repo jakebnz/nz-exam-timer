@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NZ Exam Timer - Clock</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Google Sans', sans-serif;
+            overflow: hidden;
+            /* Prevent scrolling entirely */
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            /* Prevent accidental text selection during presentation */
+        }
+
+        .timer-text {
+            font-family: 'Google Sans', sans-serif;
+            font-variant-numeric: tabular-nums;
+            /* Fixed spacing for numbers */
+        }
+
+        .slide {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            flex-direction: column;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+
+    <!-- LIVE TIMER (standalone version of slide 3) -->
+    <div class="slide bg-black relative justify-center items-center px-[2vw]">
+        <div
+            class="timer-display text-[min(50vh,22vw)] font-bold text-white timer-text leading-none tracking-tight px-[2vw]">
+            00:00:00
+        </div>
+    </div>
+
+    <script>
+        const timerDisplays = document.querySelectorAll('.timer-display');
+        let lastTimeString = '';
+
+        // --- Clock Logic ---
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-NZ', { hour12: false });
+
+            if (timeString !== lastTimeString) {
+                timerDisplays.forEach(display => {
+                    display.textContent = timeString;
+                });
+                lastTimeString = timeString;
+            }
+
+            const msUntilNextSecond = 1000 - now.getMilliseconds();
+            setTimeout(updateClock, msUntilNextSecond);
+        }
+
+        // --- Screen Wake Lock ---
+        // Stops the display sleeping while the timer is on screen.
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            if (!('wakeLock' in navigator) || wakeLock) return;
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => { wakeLock = null; });
+            } catch (err) {
+                // Denied, battery saver, or non-secure context - carry on regardless.
+                wakeLock = null;
+            }
+        }
+
+        // The lock is dropped automatically when the tab is hidden, so re-take it.
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                requestWakeLock();
+            }
+        });
+
+        // Browsers may require a user gesture before granting the lock.
+        ['click', 'keydown', 'touchstart'].forEach(evt => {
+            document.addEventListener(evt, requestWakeLock, { passive: true });
+        });
+
+        requestWakeLock();
+
+        // --- Keyboard Controls ---
+        // Esc returns to the full presentation, matching the main page.
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape') {
+                e.preventDefault();
+                window.location.href = '../';
+            }
+        });
+
+        updateClock();
+    </script>
+</body>
+
+</html>

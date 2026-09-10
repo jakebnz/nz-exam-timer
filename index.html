@@ -251,7 +251,7 @@
                         <input type="text" id="exam-name-${i}" placeholder="Year 9 Numeracy" class="w-full border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none" style="padding: 0.8vh 0.8vw; font-size: min(2vh, 1.5vw);">
                     </div>
                     <div class="col-span-4">
-                        <input type="text" id="exam-code-${i}" placeholder="1234" class="w-full border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono uppercase" style="padding: 0.8vh 0.8vw; font-size: min(2.2vh, 1.7vw);">
+                        <input type="text" id="exam-code-${i}" placeholder="1234" class="w-full border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono" style="padding: 0.8vh 0.8vw; font-size: min(2.2vh, 1.7vw);">
                     </div>
                 `;
                 examInputsContainer.appendChild(row);
@@ -413,7 +413,7 @@
 
                 const codeText = document.createElement('span');
                 codeText.className = "block w-full";
-                codeText.style.cssText = "overflow-wrap: anywhere;";
+                codeText.style.cssText = "white-space: nowrap; overflow-wrap: normal;";
                 codeText.innerText = exam.code;
                 codeEl.appendChild(codeText);
 

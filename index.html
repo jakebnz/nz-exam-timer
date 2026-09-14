@@ -444,12 +444,13 @@
             if (e.code === 'Escape') {
                 e.preventDefault();
                 goToSlide(0); // Return to setup
-            } else if (e.code === 'Space' || e.code === 'ArrowRight') {
+            } else if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'PageDown') {
+                // PageDown/PageUp are what presentation clickers send
                 e.preventDefault(); // prevent scrolling
                 if (currentSlideIndex > 0 && currentSlideIndex < 3) {
                     goToSlide(currentSlideIndex + 1);
                 }
-            } else if (e.code === 'ArrowLeft') {
+            } else if (e.code === 'ArrowLeft' || e.code === 'PageUp') {
                 e.preventDefault();
                 if (currentSlideIndex > 1) {
                     goToSlide(currentSlideIndex - 1);
